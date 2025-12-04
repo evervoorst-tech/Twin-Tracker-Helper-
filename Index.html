@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Henry & Poppy Care Tracker</title>
+    <title>Twin 1 & Twin 2 Care Tracker</title>
     <style>
       * {
         margin: 0;
@@ -343,12 +343,12 @@
         font-weight: bold;
       }
 
-      .twin-henry {
+      .twin-twin1 {
         background: #fbd38d;
         color: #744210;
       }
 
-      .twin-poppy {
+      .twin-twin2 {
         background: #9ae6b4;
         color: #22543d;
       }
@@ -812,78 +812,78 @@
   </head>
   <body>
     <div class="container">
-      <h1>👶👶 Henry & Poppy Care Tracker</h1>
+      <h1>👶👶 Twin 1 & Twin 2 Care Tracker</h1>
 
       <div class="feed-timer-section" id="feedTimer">
         <h3>Feed timers</h3>
 
         <div class="side-recommendations">
           <div class="side-recommendation-card">
-            <span>Henry next side</span>
-            <span class="side-pill" id="henryRecommendedSide">Left</span>
+            <span>Twin 1 next side</span>
+            <span class="side-pill" id="twin1RecommendedSide">Left</span>
           </div>
           <div class="side-recommendation-card">
-            <span>Poppy next side</span>
-            <span class="side-pill" id="poppyRecommendedSide">Left</span>
+            <span>Twin 2 next side</span>
+            <span class="side-pill" id="twin2RecommendedSide">Left</span>
           </div>
         </div>
 
         <div class="last-feed-row">
           <div class="last-feed-card">
-            <h4>Henry last feed</h4>
-            <p id="henryLastFeed">No feed recorded yet</p>
-            <p id="henryNextFeedDue" class="next-feed-due"></p>
+            <h4>Twin 1 last feed</h4>
+            <p id="twin1LastFeed">No feed recorded yet</p>
+            <p id="twin1NextFeedDue" class="next-feed-due"></p>
           </div>
           <div class="last-feed-card">
-            <h4>Poppy last feed</h4>
-            <p id="poppyLastFeed">No feed recorded yet</p>
-            <p id="poppyNextFeedDue" class="next-feed-due"></p>
+            <h4>Twin 2 last feed</h4>
+            <p id="twin2LastFeed">No feed recorded yet</p>
+            <p id="twin2NextFeedDue" class="next-feed-due"></p>
           </div>
         </div>
 
         <div class="feed-side-row">
-          <span class="feed-side-label">Henry side this feed:</span>
+          <span class="feed-side-label">Twin 1 side this feed:</span>
           <div class="feed-side-buttons">
             <button
               type="button"
               class="feed-side-btn"
-              id="henrySideLeft"
-              onclick="setFeedSide('henry', 'left')"
+              id="twin1SideLeft"
+              onclick="setFeedSide('twin1', 'left')"
             >
               Left
             </button>
             <button
               type="button"
               class="feed-side-btn"
-              id="henrySideRight"
-              onclick="setFeedSide('henry', 'right')"
+              id="twin1SideRight"
+              onclick="setFeedSide('twin1', 'right')"
             >
               Right
             </button>
           </div>
         </div>
 
-        <label>Feed Timer - Henry</label>
+        <label>Feed Timer - Twin 1</label>
         <div class="timer-row" style="margin-bottom: 10px">
           <button
-            id="feedStartBtnHenry"
+            id="feedStartBtnTwin1"
             class="btn-save"
             style="flex: 1"
-            onclick="startFeedTimer(event, 'henry')"
+            onclick="startFeedTimer(event, 'twin1')"
           >
-            Start Henry
+            Start Twin 1
           </button>
           <button
-            id="feedEndBtnHenry"
+            id="feedEndBtnTwin1"
             class="btn-clear"
             style="flex: 1; display: none"
-            onclick="endFeedTimer(event, 'henry')"
+            onclick="endFeedTimer(event, 'twin1')"
           >
-            End Henry
+            End Twin 1
           </button>
         </div>
         <div
-          id="timerDisplayHenry"
+          id="timerDisplayTwin1"
           style="
             display: none;
             text-align: center;
@@ -896,27 +896,27 @@
           00:00
         </div>
 
-        <label>Feed Timer - Poppy</label>
+        <label>Feed Timer - Twin 2</label>
         <div class="timer-row">
           <button
-            id="feedStartBtnPoppy"
+            id="feedStartBtnTwin2"
             class="btn-save"
             style="flex: 1"
-            onclick="startFeedTimer(event, 'poppy')"
+            onclick="startFeedTimer(event, 'twin2')"
           >
-            Start Poppy
+            Start Twin 2
           </button>
           <button
-            id="feedEndBtnPoppy"
+            id="feedEndBtnTwin2"
             class="btn-clear"
             style="flex: 1; display: none"
-            onclick="endFeedTimer(event, 'poppy')"
+            onclick="endFeedTimer(event, 'twin2')"
           >
-            End Poppy
+            End Twin 2
           </button>
         </div>
         <div
-          id="timerDisplayPoppy"
+          id="timerDisplayTwin2"
           style="
             display: none;
             text-align: center;
@@ -929,21 +929,21 @@
         </div>
 
         <div class="feed-side-row">
-          <span class="feed-side-label">Poppy side this feed:</span>
+          <span class="feed-side-label">Twin 2 side this feed:</span>
           <div class="feed-side-buttons">
             <button
               type="button"
               class="feed-side-btn"
-              id="poppySideLeft"
-              onclick="setFeedSide('poppy', 'left')"
+              id="twin2SideLeft"
+              onclick="setFeedSide('twin2', 'left')"
             >
               Left
             </button>
             <button
               type="button"
               class="feed-side-btn"
-              id="poppySideRight"
-              onclick="setFeedSide('poppy', 'right')"
+              id="twin2SideRight"
+              onclick="setFeedSide('twin2', 'right')"
             >
               Right
             </button>
@@ -988,11 +988,11 @@
       </div>
 
       <div class="twin-selector">
-        <button class="twin-btn active" onclick="selectTwin(event, 'henry')">
-          Henry
+        <button class="twin-btn active" onclick="selectTwin(event, 'twin1')">
+          Twin 1
         </button>
-        <button class="twin-btn" onclick="selectTwin(event, 'poppy')">
-          Poppy
+        <button class="twin-btn" onclick="selectTwin(event, 'twin2')">
+          Twin 2
         </button>
       </div>
 
@@ -1133,18 +1133,18 @@
         </p>
         <div class="summary-grid">
           <div class="summary-card">
-            <h3>Henry</h3>
-            <p id="henrySummaryPoopWee">Poos: 0 • Wees: 0</p>
-            <p id="henrySummaryFeeds">Feeds: 0 (0 mins total)</p>
-            <p id="henrySummaryTemp">Avg temp: –</p>
-            <p id="henrySummaryMilk">Top ups: 0 (0 ml)</p>
+            <h3>Twin 1</h3>
+            <p id="twin1SummaryPoopWee">Poos: 0 • Wees: 0</p>
+            <p id="twin1SummaryFeeds">Feeds: 0 (0 mins total)</p>
+            <p id="twin1SummaryTemp">Avg temp: –</p>
+            <p id="twin1SummaryMilk">Top ups: 0 (0 ml)</p>
           </div>
           <div class="summary-card">
-            <h3>Poppy</h3>
-            <p id="poppySummaryPoopWee">Poos: 0 • Wees: 0</p>
-            <p id="poppySummaryFeeds">Feeds: 0 (0 mins total)</p>
-            <p id="poppySummaryTemp">Avg temp: –</p>
-            <p id="poppySummaryMilk">Top ups: 0 (0 ml)</p>
+            <h3>Twin 2</h3>
+            <p id="twin2SummaryPoopWee">Poos: 0 • Wees: 0</p>
+            <p id="twin2SummaryFeeds">Feeds: 0 (0 mins total)</p>
+            <p id="twin2SummaryTemp">Avg temp: –</p>
+            <p id="twin2SummaryMilk">Top ups: 0 (0 ml)</p>
           </div>
         </div>
       </div>
@@ -1156,9 +1156,9 @@
           <div class="filter-actions">
             <label for="twinFilter">Show for:</label>
             <select id="twinFilter" onchange="displayRecords()">
-              <option value="all">Henry & Poppy</option>
-              <option value="henry">Henry only</option>
-              <option value="poppy">Poppy only</option>
+              <option value="all">Twin 1 & Twin 2</option>
+              <option value="twin1">Twin 1 only</option>
+              <option value="twin2">Twin 2 only</option>
             </select>
 
             <label for="timeFilter">Time range:</label>
@@ -1317,30 +1317,30 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
       <script>
-        // Firebase configuration
-        const firebaseConfig = {
-          apiKey: "AIzaSyBWc4-fWSBQA0F79gv9WMl2qpinSU4lcs8",
-          authDomain: "twin-tracker-f5738.firebaseapp.com",
-          projectId: "twin-tracker-f5738",
-          storageBucket: "twin-tracker-f5738.firebasestorage.app",
-          messagingSenderId: "692255742274",
-          appId: "1:692255742274:web:7c76220d13565533d6d0db",
-          measurementId: "G-H12M4KE77S",
-        };
+      // Firebase configuration (replace with your project settings)
+      const firebaseConfig = {
+        apiKey: "YOUR_FIREBASE_API_KEY",
+        authDomain: "your-project-id.firebaseapp.com",
+        projectId: "your-project-id",
+        storageBucket: "your-project-id.appspot.com",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID",
+        measurementId: "YOUR_MEASUREMENT_ID",
+      };
 
         // Initialize Firebase using compat SDK (loaded above)
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const COLLECTION_NAME = "twinsRecords";
+      const db = firebase.firestore();
+      const COLLECTION_NAME = "careRecords";
 
       // === STATE ===
-      let selectedTwin = "henry";
+      let selectedTwin = "twin1";
       let selectedActivity = "nappy";
       let records = [];
-      let feedStartTimeHenry = null;
-      let feedStartTimePoppy = null;
-      let timerIntervalHenry = null;
-      let timerIntervalPoppy = null;
+      let feedStartTimeTwin1 = null;
+      let feedStartTimeTwin2 = null;
+      let timerIntervalTwin1 = null;
+      let timerIntervalTwin2 = null;
       const FEED_GROUP_WINDOW_MS = 30 * 60 * 1000;
       let selectedNappyTypes = [];
       let selectedPoopColor = "";
@@ -1348,7 +1348,7 @@
       let currentEditRecordId = null;
       let selectedFeedQuality = "";
       let editFeedQualityLevel = "";
-      let feedSideSelection = { henry: null, poppy: null };
+      let feedSideSelection = { twin1: null, twin2: null };
       let editFeedSideSelection = "";
       let pendingFeedFinalize = null;
 
@@ -1453,7 +1453,7 @@
 
       function buildFeedPartMap(allRecords) {
         const map = {};
-        ["henry", "poppy"].forEach((twin) => {
+        ["twin1", "twin2"].forEach((twin) => {
           const twinFeeds = allRecords.filter(
             (r) => r.type === "feed" && r.twin === twin
           );
@@ -1566,7 +1566,7 @@
       }
 
       function updateLastFeedDisplays() {
-        ["henry", "poppy"].forEach((twin) => {
+        ["twin1", "twin2"].forEach((twin) => {
           const lastStart = getLastFeedStart(twin);
           const target = document.getElementById(`${twin}LastFeed`);
           const nextFeedTarget = document.getElementById(`${twin}NextFeedDue`);
@@ -1617,7 +1617,7 @@
       }
 
       function updateFeedSideRecommendations() {
-        ["henry", "poppy"].forEach((twin) => {
+        ["twin1", "twin2"].forEach((twin) => {
           const recommended = getRecommendedFeedSide(twin);
           const pill = document.getElementById(`${twin}RecommendedSide`);
           if (pill) {
@@ -1777,26 +1777,26 @@
         e.preventDefault();
         const now = new Date();
 
-        if (twin === "henry") {
-          feedStartTimeHenry = now;
-          document.getElementById("feedStartBtnHenry").style.display = "none";
-          document.getElementById("feedEndBtnHenry").style.display = "block";
-          document.getElementById("timerDisplayHenry").style.display = "block";
-          timerIntervalHenry = setInterval(
-            () => updateTimerDisplay("henry"),
+        if (twin === "twin1") {
+          feedStartTimeTwin1 = now;
+          document.getElementById("feedStartBtnTwin1").style.display = "none";
+          document.getElementById("feedEndBtnTwin1").style.display = "block";
+          document.getElementById("timerDisplayTwin1").style.display = "block";
+          timerIntervalTwin1 = setInterval(
+            () => updateTimerDisplay("twin1"),
             1000
           );
-          updateTimerDisplay("henry");
+          updateTimerDisplay("twin1");
         } else {
-          feedStartTimePoppy = now;
-          document.getElementById("feedStartBtnPoppy").style.display = "none";
-          document.getElementById("feedEndBtnPoppy").style.display = "block";
-          document.getElementById("timerDisplayPoppy").style.display = "block";
-          timerIntervalPoppy = setInterval(
-            () => updateTimerDisplay("poppy"),
+          feedStartTimeTwin2 = now;
+          document.getElementById("feedStartBtnTwin2").style.display = "none";
+          document.getElementById("feedEndBtnTwin2").style.display = "block";
+          document.getElementById("timerDisplayTwin2").style.display = "block";
+          timerIntervalTwin2 = setInterval(
+            () => updateTimerDisplay("twin2"),
             1000
           );
-          updateTimerDisplay("poppy");
+          updateTimerDisplay("twin2");
         }
       }
 
@@ -1804,7 +1804,7 @@
         e.preventDefault();
 
         const feedStartTime =
-          twin === "henry" ? feedStartTimeHenry : feedStartTimePoppy;
+          twin === "twin1" ? feedStartTimeTwin1 : feedStartTimeTwin2;
         if (!feedStartTime) return;
 
         stopTimer(twin);
@@ -1845,7 +1845,7 @@
 
       function updateTimerDisplay(twin) {
         const feedStartTime =
-          twin === "henry" ? feedStartTimeHenry : feedStartTimePoppy;
+          twin === "twin1" ? feedStartTimeTwin1 : feedStartTimeTwin2;
         if (!feedStartTime) return;
 
         const now = new Date();
@@ -1854,7 +1854,7 @@
         const seconds = Math.floor((elapsed % 60000) / 1000);
 
         const displayId =
-          twin === "henry" ? "timerDisplayHenry" : "timerDisplayPoppy";
+          twin === "twin1" ? "timerDisplayTwin1" : "timerDisplayTwin2";
         document.getElementById(displayId).textContent =
           String(minutes).padStart(2, "0") +
           ":" +
@@ -1862,26 +1862,26 @@
       }
 
       function stopTimer(twin) {
-        if (twin === "henry") {
-          if (timerIntervalHenry) {
-            clearInterval(timerIntervalHenry);
-            timerIntervalHenry = null;
+        if (twin === "twin1") {
+          if (timerIntervalTwin1) {
+            clearInterval(timerIntervalTwin1);
+            timerIntervalTwin1 = null;
           }
-          feedStartTimeHenry = null;
-          document.getElementById("feedStartBtnHenry").style.display = "block";
-          document.getElementById("feedEndBtnHenry").style.display = "none";
-          document.getElementById("timerDisplayHenry").style.display = "none";
-          document.getElementById("timerDisplayHenry").textContent = "00:00";
+          feedStartTimeTwin1 = null;
+          document.getElementById("feedStartBtnTwin1").style.display = "block";
+          document.getElementById("feedEndBtnTwin1").style.display = "none";
+          document.getElementById("timerDisplayTwin1").style.display = "none";
+          document.getElementById("timerDisplayTwin1").textContent = "00:00";
         } else {
-          if (timerIntervalPoppy) {
-            clearInterval(timerIntervalPoppy);
-            timerIntervalPoppy = null;
+          if (timerIntervalTwin2) {
+            clearInterval(timerIntervalTwin2);
+            timerIntervalTwin2 = null;
           }
-          feedStartTimePoppy = null;
-          document.getElementById("feedStartBtnPoppy").style.display = "block";
-          document.getElementById("feedEndBtnPoppy").style.display = "none";
-          document.getElementById("timerDisplayPoppy").style.display = "none";
-          document.getElementById("timerDisplayPoppy").textContent = "00:00";
+          feedStartTimeTwin2 = null;
+          document.getElementById("feedStartBtnTwin2").style.display = "block";
+          document.getElementById("feedEndBtnTwin2").style.display = "none";
+          document.getElementById("timerDisplayTwin2").style.display = "none";
+          document.getElementById("timerDisplayTwin2").textContent = "00:00";
         }
       }
 
@@ -2312,9 +2312,9 @@
                 record.details = buildFeedDetails(record);
               }
 
-              const twinLabel = record.twin === "henry" ? "Henry" : "Poppy";
+              const twinLabel = record.twin === "twin1" ? "Twin 1" : "Twin 2";
               const twinClass =
-                record.twin === "henry" ? "twin-henry" : "twin-poppy";
+                record.twin === "twin1" ? "twin-twin1" : "twin-twin2";
               const inlineQuality =
                 record.type === "feed" ? renderFeedQualityInline(record) : "";
               const typeLabels = {
@@ -2382,7 +2382,7 @@
       // === SUMMARY (LAST 24 HOURS) ===
       function updateSummary() {
         const cutoff = nowMinus24h();
-        const twins = ["henry", "poppy"];
+        const twins = ["twin1", "twin2"];
 
         twins.forEach((twin) => {
           const twinRecords = records.filter(
@@ -2427,7 +2427,7 @@
             0
           );
 
-          const prefix = twin === "henry" ? "henry" : "poppy";
+          const prefix = twin === "twin1" ? "twin1" : "twin2";
 
           const poopWeeEl = document.getElementById(prefix + "SummaryPoopWee");
           const feedsEl = document.getElementById(prefix + "SummaryFeeds");
