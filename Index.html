@@ -1,0 +1,2495 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Henry & Poppy Care Tracker</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 16px;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 22px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      h1 {
+        color: #667eea;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2em;
+      }
+
+      .twin-selector,
+      .activity-selector {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .twin-btn {
+        flex: 1;
+        padding: 15px;
+        border: 2px solid #667eea;
+        background: white;
+        color: #667eea;
+        font-size: 1.1em;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .twin-btn.active {
+        background: #667eea;
+        color: white;
+      }
+
+      .activity-btn {
+        flex: 1;
+        min-width: 0;
+        padding: 15px;
+        border: 2px solid #2b7a78;
+        background: white;
+        color: #2b7a78;
+        font-size: 1.05em;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-align: center;
+        white-space: normal;
+      }
+
+      .activity-btn.active {
+        background: #2b7a78;
+        color: white;
+        box-shadow: 0 8px 15px rgba(43, 122, 120, 0.25);
+      }
+
+      .form-section {
+        background: #f8f9ff;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .feed-timer-section {
+        background: #fff;
+        border: 2px solid #667eea;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+
+      .feed-timer-section h3 {
+        margin-top: 0;
+        margin-bottom: 12px;
+        color: #667eea;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+        font-weight: 600;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 1em;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .checkbox-group input[type="checkbox"] {
+        width: auto;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      button {
+        flex: 1;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-save {
+        background: #48bb78;
+        color: white;
+      }
+
+      .btn-save:hover {
+        background: #38a169;
+      }
+
+      .btn-clear {
+        background: #ed8936;
+        color: white;
+      }
+
+      .btn-clear:hover {
+        background: #dd6b20;
+      }
+
+      .records {
+        margin-top: 30px;
+      }
+
+      .records h2 {
+        color: #667eea;
+        margin-bottom: 15px;
+      }
+
+      .records-list {
+        max-height: 720px;
+        overflow-y: auto;
+        padding-right: 6px;
+        margin-top: 10px;
+      }
+
+      .records-list::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      .records-list::-webkit-scrollbar-thumb {
+        background: #cbd5e0;
+        border-radius: 10px;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+
+      .modal {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .modal h3 {
+        margin-bottom: 12px;
+        color: #667eea;
+      }
+
+      .modal .form-group {
+        margin-bottom: 12px;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .modal-close {
+        background: #a0aec0;
+        color: white;
+      }
+
+      .modal-close:hover {
+        background: #718096;
+      }
+
+      .record-item {
+        background: white;
+        padding: 15px;
+        border-left: 4px solid #667eea;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .record-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .record-identifiers {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .record-meta {
+        text-align: right;
+      }
+
+      .record-time {
+        color: #666;
+        font-size: 0.9em;
+      }
+
+      .record-type-pill {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.85em;
+        font-weight: 700;
+      }
+
+      .record-type-feed {
+        background: #ebf4ff;
+        color: #1a365d;
+      }
+
+      .record-type-nappy {
+        background: #fffaf0;
+        color: #7b341e;
+      }
+
+      .record-type-temp {
+        background: #e6fffa;
+        color: #234e52;
+      }
+
+      .record-type-milk {
+        background: #f0fff4;
+        color: #22543d;
+      }
+
+      .record-details {
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .record-primary {
+        font-weight: 700;
+        color: #1a202c;
+        margin-bottom: 6px;
+      }
+
+      .record-detail-list {
+        list-style: disc;
+        padding-left: 18px;
+        color: #2d3748;
+        margin-bottom: 8px;
+      }
+
+      .record-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        margin-top: 6px;
+      }
+
+      .twin-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: bold;
+      }
+
+      .twin-henry {
+        background: #fbd38d;
+        color: #744210;
+      }
+
+      .twin-poppy {
+        background: #9ae6b4;
+        color: #22543d;
+      }
+
+      .delete-btn {
+        background: #fc8181;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.85em;
+      }
+
+      .delete-btn:hover {
+        background: #f56565;
+      }
+
+      .nappy-btn {
+        flex: 1;
+        padding: 15px;
+        border: 2px solid #ddd;
+        background: white;
+        font-size: 1.2em;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .nappy-btn.active {
+        border-color: #667eea;
+        background: #667eea;
+        color: white;
+        transform: scale(1.05);
+      }
+
+      .nappy-btn:hover {
+        border-color: #667eea;
+      }
+
+      .temp-selector {
+        background: white;
+        border: 2px solid #667eea;
+        border-radius: 10px;
+        padding: 10px;
+        max-height: 250px;
+        overflow-y: auto;
+        margin-bottom: 15px;
+      }
+
+      .temp-scroll {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .temp-option {
+        padding: 12px 20px;
+        background: #f8f9ff;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 1.1em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .temp-option:hover {
+        background: #e8e9ff;
+        border-color: #667eea;
+      }
+
+      .temp-option.selected {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+        transform: scale(1.05);
+      }
+
+      .temp-display {
+        text-align: center;
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #667eea;
+        padding: 15px;
+        background: #f8f9ff;
+        border-radius: 10px;
+      }
+
+      .summary {
+        margin-top: 30px;
+        margin-bottom: 20px;
+      }
+
+      .summary h2 {
+        color: #667eea;
+        margin-bottom: 10px;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .summary-card {
+        background: #f8f9ff;
+        border-radius: 12px;
+        padding: 12px 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .summary-card h3 {
+        margin-bottom: 6px;
+        font-size: 1.1em;
+        color: #444;
+      }
+
+      .summary-card p {
+        font-size: 0.9em;
+        color: #555;
+        margin-bottom: 3px;
+      }
+
+      .records-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .filter-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .records-filters label {
+        margin-bottom: 0;
+        font-size: 0.9em;
+      }
+
+      .records-filters select {
+        width: auto;
+        min-width: 140px;
+        padding: 8px;
+        font-size: 0.9em;
+      }
+
+      .filter-reset-btn {
+        background: #edf2f7;
+        color: #2d3748;
+        border: 1px solid #cbd5e0;
+        padding: 9px 14px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .filter-reset-btn:hover {
+        background: #e2e8f0;
+      }
+
+      .timer-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .feed-quality-card {
+        background: #f8f9ff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px;
+        margin-top: 10px;
+      }
+
+      .last-feed-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 10px;
+        margin: 12px 0 6px;
+      }
+
+      .last-feed-card {
+        background: #f8f9ff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px 12px;
+      }
+
+      .last-feed-card h4 {
+        margin-bottom: 4px;
+        color: #2d3748;
+      }
+
+      .last-feed-card p {
+        color: #4a5568;
+        font-weight: 700;
+      }
+
+      .next-feed-due {
+        color: #f56565;
+        font-weight: 600;
+        margin-top: 4px;
+      }
+
+      .feed-quality-card p {
+        color: #4a5568;
+        font-size: 0.95em;
+        margin-bottom: 8px;
+      }
+
+      .feed-side-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+
+      .feed-side-label {
+        font-weight: 700;
+        color: #2d3748;
+      }
+
+      .feed-side-buttons {
+        display: flex;
+        gap: 8px;
+      }
+
+      .poop-color-group {
+        margin-top: 10px;
+      }
+
+      .poop-color-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .poop-color-btn {
+        flex: 1;
+        min-width: 120px;
+        border: 2px solid #cbd5e0;
+        background: #fff;
+        color: #2d3748;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .poop-color-btn.active {
+        border-color: #667eea;
+        background: #667eea;
+        color: white;
+        box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+      }
+
+      .feed-side-btn {
+        border: 2px solid #cbd5e0;
+        background: #fff;
+        color: #2d3748;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        cursor: pointer;
+        min-width: 72px;
+      }
+
+      .feed-side-btn.active {
+        border-color: #667eea;
+        background: #667eea;
+        color: white;
+        box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+      }
+
+      .side-recommendations {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .side-recommendation-card {
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 10px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 700;
+        color: #2d3748;
+      }
+
+      .side-pill {
+        background: #667eea;
+        color: white;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.95em;
+      }
+
+      .feed-quality-buttons {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+
+      .feed-quality-btn {
+        flex: 1;
+        min-width: 90px;
+        border: 2px solid #cbd5e0;
+        background: #fff;
+        color: #2d3748;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+      }
+
+      .feed-quality-btn.active {
+        border-color: #667eea;
+        background: #667eea;
+        color: white;
+        box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+      }
+
+      .inline-feed-quality {
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 8px;
+        margin-top: 8px;
+      }
+
+      .inline-feed-quality .feed-quality-buttons {
+        gap: 6px;
+      }
+
+      .inline-feed-quality .feed-quality-btn {
+        min-width: 70px;
+        padding: 8px;
+        font-size: 0.9em;
+      }
+
+      .inline-quality-note {
+        width: 100%;
+        margin-top: 6px;
+        padding: 8px;
+        border: 1px solid #cbd5e0;
+        border-radius: 8px;
+        font-size: 0.9em;
+      }
+
+      .inline-quality-label {
+        font-size: 0.85em;
+        color: #4a5568;
+        margin-bottom: 4px;
+      }
+
+      .feed-quality-summary {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .feed-quality-chip {
+        display: inline-block;
+        background: #667eea;
+        color: white;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.95em;
+      }
+
+      .inline-quality-note-display {
+        margin-top: 6px;
+        background: #edf2f7;
+        border-radius: 8px;
+        padding: 8px 10px;
+        color: #2d3748;
+        font-size: 0.9em;
+        border: 1px solid #e2e8f0;
+      }
+
+      .feed-end-modal {
+        max-width: 520px;
+      }
+
+      .feed-end-summary {
+        font-size: 0.95em;
+        color: #4a5568;
+        margin-bottom: 10px;
+      }
+
+      .feed-end-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .btn-secondary {
+        background: #e2e8f0;
+        color: #1a202c;
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 10px;
+        }
+
+        .container {
+          padding: 16px;
+          border-radius: 16px;
+        }
+
+        h1 {
+          font-size: 1.6em;
+          line-height: 1.2;
+        }
+
+        .twin-selector,
+        .btn-group,
+        .records-filters {
+          flex-direction: column;
+        }
+
+        .twin-btn,
+        .records-filters select,
+        .btn-group button,
+        .timer-row button {
+          width: 100%;
+        }
+
+        .activity-selector {
+          justify-content: flex-start;
+        }
+
+        .activity-btn {
+          flex: 1 1 calc(50% - 8px);
+          padding: 12px;
+          font-size: 1em;
+        }
+
+        .modal {
+          width: 96%;
+          max-height: 90vh;
+          overflow-y: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>👶👶 Henry & Poppy Care Tracker</h1>
+
+      <div class="feed-timer-section" id="feedTimer">
+        <h3>Feed timers</h3>
+
+        <div class="side-recommendations">
+          <div class="side-recommendation-card">
+            <span>Henry next side</span>
+            <span class="side-pill" id="henryRecommendedSide">Left</span>
+          </div>
+          <div class="side-recommendation-card">
+            <span>Poppy next side</span>
+            <span class="side-pill" id="poppyRecommendedSide">Left</span>
+          </div>
+        </div>
+
+        <div class="last-feed-row">
+          <div class="last-feed-card">
+            <h4>Henry last feed</h4>
+            <p id="henryLastFeed">No feed recorded yet</p>
+            <p id="henryNextFeedDue" class="next-feed-due"></p>
+          </div>
+          <div class="last-feed-card">
+            <h4>Poppy last feed</h4>
+            <p id="poppyLastFeed">No feed recorded yet</p>
+            <p id="poppyNextFeedDue" class="next-feed-due"></p>
+          </div>
+        </div>
+
+        <div class="feed-side-row">
+          <span class="feed-side-label">Henry side this feed:</span>
+          <div class="feed-side-buttons">
+            <button
+              type="button"
+              class="feed-side-btn"
+              id="henrySideLeft"
+              onclick="setFeedSide('henry', 'left')"
+            >
+              Left
+            </button>
+            <button
+              type="button"
+              class="feed-side-btn"
+              id="henrySideRight"
+              onclick="setFeedSide('henry', 'right')"
+            >
+              Right
+            </button>
+          </div>
+        </div>
+
+        <label>Feed Timer - Henry</label>
+        <div class="timer-row" style="margin-bottom: 10px">
+          <button
+            id="feedStartBtnHenry"
+            class="btn-save"
+            style="flex: 1"
+            onclick="startFeedTimer(event, 'henry')"
+          >
+            Start Henry
+          </button>
+          <button
+            id="feedEndBtnHenry"
+            class="btn-clear"
+            style="flex: 1; display: none"
+            onclick="endFeedTimer(event, 'henry')"
+          >
+            End Henry
+          </button>
+        </div>
+        <div
+          id="timerDisplayHenry"
+          style="
+            display: none;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+          "
+        >
+          00:00
+        </div>
+
+        <label>Feed Timer - Poppy</label>
+        <div class="timer-row">
+          <button
+            id="feedStartBtnPoppy"
+            class="btn-save"
+            style="flex: 1"
+            onclick="startFeedTimer(event, 'poppy')"
+          >
+            Start Poppy
+          </button>
+          <button
+            id="feedEndBtnPoppy"
+            class="btn-clear"
+            style="flex: 1; display: none"
+            onclick="endFeedTimer(event, 'poppy')"
+          >
+            End Poppy
+          </button>
+        </div>
+        <div
+          id="timerDisplayPoppy"
+          style="
+            display: none;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+          "
+        >
+          00:00
+        </div>
+
+        <div class="feed-side-row">
+          <span class="feed-side-label">Poppy side this feed:</span>
+          <div class="feed-side-buttons">
+            <button
+              type="button"
+              class="feed-side-btn"
+              id="poppySideLeft"
+              onclick="setFeedSide('poppy', 'left')"
+            >
+              Left
+            </button>
+            <button
+              type="button"
+              class="feed-side-btn"
+              id="poppySideRight"
+              onclick="setFeedSide('poppy', 'right')"
+            >
+              Right
+            </button>
+          </div>
+        </div>
+
+        <div class="feed-quality-card">
+          <label style="margin-bottom: 6px; display: block">Feed quality</label>
+          <p>Tap a level and add an optional note before ending the feed.</p>
+          <div class="feed-quality-buttons">
+            <button
+              type="button"
+              class="feed-quality-btn"
+              onclick="setFeedQuality('Low')"
+            >
+              Low
+            </button>
+            <button
+              type="button"
+              class="feed-quality-btn"
+              onclick="setFeedQuality('Medium')"
+            >
+              Medium
+            </button>
+            <button
+              type="button"
+              class="feed-quality-btn"
+              onclick="setFeedQuality('Great')"
+            >
+              Great
+            </button>
+          </div>
+          <div class="form-group" style="margin-bottom: 0">
+            <label for="feedQualityNote">Comment (optional)</label>
+            <input
+              type="text"
+              id="feedQualityNote"
+              placeholder="e.g., Sleepy, distracted, great latch"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="twin-selector">
+        <button class="twin-btn active" onclick="selectTwin(event, 'henry')">
+          Henry
+        </button>
+        <button class="twin-btn" onclick="selectTwin(event, 'poppy')">
+          Poppy
+        </button>
+      </div>
+
+      <div class="form-section">
+        <div class="form-group">
+          <label>Activity Type</label>
+          <div class="activity-selector">
+            <button
+              type="button"
+              class="activity-btn active"
+              onclick="selectActivity(event, 'nappy')"
+            >
+              Nappy Change
+            </button>
+            <button
+              type="button"
+              class="activity-btn"
+              onclick="selectActivity(event, 'feed')"
+            >
+              Feed
+            </button>
+            <button
+              type="button"
+              class="activity-btn"
+              onclick="selectActivity(event, 'temp')"
+            >
+              Temperature
+            </button>
+            <button
+              type="button"
+              class="activity-btn"
+              onclick="selectActivity(event, 'milk')"
+            >
+              Expressed Milk Top-up
+            </button>
+          </div>
+        </div>
+
+        <!-- Nappy type -->
+        <div class="form-group" id="nappyType" style="display: block">
+          <label>Nappy Type</label>
+          <div style="display: flex; gap: 10px">
+            <button
+              type="button"
+              class="nappy-btn"
+              id="poopBtn"
+              onclick="toggleNappyType('poop')"
+            >
+              💩 Poop
+            </button>
+            <button
+              type="button"
+              class="nappy-btn"
+              id="peeBtn"
+              onclick="toggleNappyType('pee')"
+            >
+              💧 Wee
+            </button>
+          </div>
+
+          <div
+            class="poop-color-group"
+            id="poopColorGroup"
+            style="display: none"
+          >
+            <label>Poo colour</label>
+            <div class="poop-color-buttons">
+              <button
+                type="button"
+                class="poop-color-btn"
+                onclick="selectPoopColor('Green')"
+              >
+                Green
+              </button>
+              <button
+                type="button"
+                class="poop-color-btn"
+                onclick="selectPoopColor('Mustard')"
+              >
+                Mustard
+              </button>
+              <button
+                type="button"
+                class="poop-color-btn"
+                onclick="selectPoopColor('Dark')"
+              >
+                Dark
+              </button>
+              <button
+                type="button"
+                class="poop-color-btn"
+                onclick="selectPoopColor('Yellow')"
+              >
+                Yellow
+              </button>
+              <button
+                type="button"
+                class="poop-color-btn"
+                onclick="selectPoopColor('Brown')"
+              >
+                Brown
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Temperature -->
+        <div class="form-group" id="tempValue" style="display: none">
+          <label>Temperature (°C)</label>
+          <div class="temp-selector">
+            <div class="temp-scroll" id="tempScroll"></div>
+          </div>
+          <div class="temp-display" id="tempDisplay">36.5°C</div>
+        </div>
+
+        <!-- Milk top up -->
+        <div class="form-group" id="milkAmount" style="display: none">
+          <label>Expressed Milk Amount (ml)</label>
+          <input type="number" id="milkMl" placeholder="e.g., 60" />
+        </div>
+
+        <div class="form-group">
+          <label>Notes (optional)</label>
+          <input type="text" id="notes" placeholder="Any additional notes..." />
+        </div>
+
+        <div class="btn-group">
+          <button class="btn-save" onclick="saveRecord()">Save Record</button>
+          <button class="btn-clear" onclick="clearForm()">Clear</button>
+        </div>
+      </div>
+
+      <!-- Daily summary -->
+      <div class="summary">
+        <h2>Last 24 hours summary</h2>
+        <p style="font-size: 0.85em; color: #666; margin-bottom: 8px">
+          Automatically calculated for the last 24 hours (Melbourne time).
+        </p>
+        <div class="summary-grid">
+          <div class="summary-card">
+            <h3>Henry</h3>
+            <p id="henrySummaryPoopWee">Poos: 0 • Wees: 0</p>
+            <p id="henrySummaryFeeds">Feeds: 0 (0 mins total)</p>
+            <p id="henrySummaryTemp">Avg temp: –</p>
+            <p id="henrySummaryMilk">Top ups: 0 (0 ml)</p>
+          </div>
+          <div class="summary-card">
+            <h3>Poppy</h3>
+            <p id="poppySummaryPoopWee">Poos: 0 • Wees: 0</p>
+            <p id="poppySummaryFeeds">Feeds: 0 (0 mins total)</p>
+            <p id="poppySummaryTemp">Avg temp: –</p>
+            <p id="poppySummaryMilk">Top ups: 0 (0 ml)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="records">
+        <h2>Recent Records</h2>
+
+        <div class="records-filters">
+          <div class="filter-actions">
+            <label for="twinFilter">Show for:</label>
+            <select id="twinFilter" onchange="displayRecords()">
+              <option value="all">Henry & Poppy</option>
+              <option value="henry">Henry only</option>
+              <option value="poppy">Poppy only</option>
+            </select>
+
+            <label for="timeFilter">Time range:</label>
+            <select id="timeFilter" onchange="displayRecords()">
+              <option value="all">All time</option>
+              <option value="24h">Last 24 hours</option>
+            </select>
+
+            <label for="typeFilter">Entry type:</label>
+            <select id="typeFilter" onchange="displayRecords()">
+              <option value="all">All entries</option>
+              <option value="nappy">Nappy</option>
+              <option value="feed">Feed</option>
+              <option value="temp">Temperature</option>
+              <option value="milk">Expressed milk</option>
+            </select>
+          </div>
+
+          <button class="filter-reset-btn" onclick="resetRecordFilters()">
+            Reset filters
+          </button>
+        </div>
+
+        <div id="recordsList" class="records-list"></div>
+      </div>
+
+      <div class="modal-overlay" id="feedQualityModal">
+        <div class="modal feed-end-modal">
+          <h3>Wrap up this feed?</h3>
+          <p class="feed-end-summary" id="feedEndSummary"></p>
+          <div class="feed-quality-buttons" style="margin-bottom: 6px">
+            <button
+              type="button"
+              class="feed-quality-btn"
+              onclick="setFeedQuality('Low')"
+            >
+              Low
+            </button>
+            <button
+              type="button"
+              class="feed-quality-btn"
+              onclick="setFeedQuality('Medium')"
+            >
+              Medium
+            </button>
+            <button
+              type="button"
+              class="feed-quality-btn"
+              onclick="setFeedQuality('Great')"
+            >
+              Great
+            </button>
+          </div>
+          <label for="feedQualityModalNote" style="display: block; margin-bottom: 6px"
+            >Comment (optional)</label
+          >
+          <input
+            type="text"
+            id="feedQualityModalNote"
+            placeholder="e.g., Sleepy, distracted, great latch"
+          />
+          <div class="feed-end-actions">
+            <button class="btn-save" onclick="finalizeFeedRecord()">Save feed</button>
+            <button class="btn-secondary" onclick="cancelFeedFinalize()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-overlay" id="editModal">
+        <div class="modal">
+          <h3>Edit Record</h3>
+          <div class="form-group">
+            <label for="editDetails">Details</label>
+            <textarea
+              id="editDetails"
+              style="width: 100%; padding: 10px; min-height: 80px"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="editTimestamp">Timestamp</label>
+            <input type="datetime-local" id="editTimestamp" />
+          </div>
+          <div class="form-group" id="editFeedTimes" style="display: none">
+            <label>Feed start/end (Melbourne time)</label>
+            <input type="datetime-local" id="editFeedStart" />
+            <input type="datetime-local" id="editFeedEnd" style="margin-top: 8px" />
+            <div
+              id="editFeedDuration"
+              class="feed-end-summary"
+              style="margin-top: 6px"
+            ></div>
+          </div>
+          <div class="form-group" id="editFeedSideGroup" style="display: none">
+            <label>Feeding side</label>
+            <div class="feed-side-buttons">
+              <button
+                type="button"
+                class="feed-side-btn"
+                id="editFeedSideLeft"
+                onclick="setEditFeedSide('left')"
+              >
+                Left
+              </button>
+              <button
+                type="button"
+                class="feed-side-btn"
+                id="editFeedSideRight"
+                onclick="setEditFeedSide('right')"
+              >
+                Right
+              </button>
+            </div>
+          </div>
+          <div class="form-group" id="editFeedQualityGroup" style="display: none">
+            <label>Feed quality</label>
+            <div class="feed-quality-buttons" style="margin-bottom: 6px">
+              <button
+                type="button"
+                class="feed-quality-btn"
+                onclick="setEditFeedQuality('Low')"
+              >
+                Low
+              </button>
+              <button
+                type="button"
+                class="feed-quality-btn"
+                onclick="setEditFeedQuality('Medium')"
+              >
+                Medium
+              </button>
+              <button
+                type="button"
+                class="feed-quality-btn"
+                onclick="setEditFeedQuality('Great')"
+              >
+                Great
+              </button>
+            </div>
+            <label for="editFeedQualityNote">Comment (optional)</label>
+            <input
+              type="text"
+              id="editFeedQualityNote"
+              placeholder="Add a quick note"
+            />
+          </div>
+          <div class="modal-actions">
+            <button class="btn-save" onclick="saveEdit()">Save</button>
+            <button class="modal-close" onclick="closeEditModal()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Firebase (compat) CDN scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+      <script>
+        // Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyBWc4-fWSBQA0F79gv9WMl2qpinSU4lcs8",
+          authDomain: "twin-tracker-f5738.firebaseapp.com",
+          projectId: "twin-tracker-f5738",
+          storageBucket: "twin-tracker-f5738.firebasestorage.app",
+          messagingSenderId: "692255742274",
+          appId: "1:692255742274:web:7c76220d13565533d6d0db",
+          measurementId: "G-H12M4KE77S",
+        };
+
+        // Initialize Firebase using compat SDK (loaded above)
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const COLLECTION_NAME = "twinsRecords";
+
+      // === STATE ===
+      let selectedTwin = "henry";
+      let selectedActivity = "nappy";
+      let records = [];
+      let feedStartTimeHenry = null;
+      let feedStartTimePoppy = null;
+      let timerIntervalHenry = null;
+      let timerIntervalPoppy = null;
+      const FEED_GROUP_WINDOW_MS = 30 * 60 * 1000;
+      let selectedNappyTypes = [];
+      let selectedPoopColor = "";
+      let selectedTemp = 36.5;
+      let currentEditRecordId = null;
+      let selectedFeedQuality = "";
+      let editFeedQualityLevel = "";
+      let feedSideSelection = { henry: null, poppy: null };
+      let editFeedSideSelection = "";
+      let pendingFeedFinalize = null;
+
+      // === UTILITIES ===
+      function formatMelbourneDate(date) {
+        const d = date instanceof Date ? date : new Date(date);
+        return d.toLocaleString("en-AU", {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Australia/Melbourne",
+        });
+      }
+
+      function escapeHtml(str) {
+        if (!str) return "";
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function syncFeedQualityButtons(level, selectors) {
+        const targets = Array.isArray(selectors) ? selectors : [selectors];
+        targets.forEach((selector) => {
+          document.querySelectorAll(selector).forEach((btn) => {
+            if (btn.textContent.trim().toLowerCase() === level?.toLowerCase()) {
+              btn.classList.add("active");
+            } else {
+              btn.classList.remove("active");
+            }
+          });
+        });
+      }
+
+      function setFeedQuality(level) {
+        selectedFeedQuality = level;
+        syncFeedQualityButtons(level, [
+          ".feed-quality-card .feed-quality-btn",
+          "#feedQualityModal .feed-quality-btn",
+        ]);
+      }
+
+      function setEditFeedQuality(level) {
+        editFeedQualityLevel = level;
+        syncFeedQualityButtons(level, "#editFeedQualityGroup .feed-quality-btn");
+      }
+
+      function formatDateTimeLocal(date) {
+        const d = date instanceof Date ? date : new Date(date);
+        const offset = d.getTimezoneOffset();
+        const local = new Date(d.getTime() - offset * 60000);
+        return local.toISOString().slice(0, 16);
+      }
+
+      function formatMelbourneTimeOnly(date) {
+        const d = date instanceof Date ? date : new Date(date);
+        return d.toLocaleTimeString("en-AU", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+          timeZone: "Australia/Melbourne",
+        });
+      }
+
+      function normalizeDate(date) {
+        if (!date) return null;
+        if (date.toDate) return date.toDate();
+        return date instanceof Date ? date : new Date(date);
+      }
+
+      function getFeedStartTime(record) {
+        return normalizeDate(record.feedStart) || normalizeDate(record.timestamp);
+      }
+
+      function groupFeedsByWindow(feedRecords, windowMs = FEED_GROUP_WINDOW_MS) {
+        const sorted = feedRecords
+          .map((record) => ({ record, start: getFeedStartTime(record) }))
+          .filter((item) => item.start)
+          .sort((a, b) => a.start - b.start);
+
+        const groups = [];
+        let currentGroup = [];
+        let lastStart = null;
+
+        sorted.forEach((item) => {
+          if (!lastStart || item.start - lastStart > windowMs) {
+            if (currentGroup.length) groups.push(currentGroup);
+            currentGroup = [item];
+          } else {
+            currentGroup.push(item);
+          }
+          lastStart = item.start;
+        });
+
+        if (currentGroup.length) groups.push(currentGroup);
+        return groups;
+      }
+
+      function buildFeedPartMap(allRecords) {
+        const map = {};
+        ["henry", "poppy"].forEach((twin) => {
+          const twinFeeds = allRecords.filter(
+            (r) => r.type === "feed" && r.twin === twin
+          );
+          const groups = groupFeedsByWindow(twinFeeds);
+
+          groups.forEach((group) => {
+            group.forEach((item, idx) => {
+              map[item.record.id] = { part: idx + 1, groupSize: group.length };
+            });
+          });
+        });
+        return map;
+      }
+
+      function formatDurationText(durationMs) {
+        const safeDuration = Math.max(0, durationMs || 0);
+        const minutes = Math.floor(safeDuration / 60000);
+        const seconds = Math.floor((safeDuration % 60000) / 1000);
+        let label = `Feed: ${minutes} minute${minutes === 1 ? "" : "s"}`;
+        if (seconds > 0) {
+          label += ` ${seconds} second${seconds === 1 ? "" : "s"}`;
+        }
+        return { label, minutes, seconds };
+      }
+
+      function capitalize(word) {
+        if (!word) return "";
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }
+
+      function buildFeedDetails(record) {
+        const start = normalizeDate(record.feedStart) || normalizeDate(record.timestamp);
+        const end = normalizeDate(record.feedEnd) || new Date();
+        const durationMs = Math.max(
+          0,
+          record.durationMs || (start && end ? end - start : 0)
+        );
+
+        const { label } = formatDurationText(durationMs);
+        const startText = start ? formatMelbourneTimeOnly(start) : null;
+        const endText = end ? formatMelbourneTimeOnly(end) : null;
+
+        let details = label;
+        if (!record.feedGroupSize && record.type === "feed" && record.id) {
+          const partInfo = buildFeedPartMap(records)[record.id];
+          if (partInfo) {
+            record.feedPart = partInfo.part;
+            record.feedGroupSize = partInfo.groupSize;
+          }
+        }
+        if (record.feedGroupSize && record.feedGroupSize > 1) {
+          details += ` – Part ${record.feedPart} of ${record.feedGroupSize}`;
+        }
+        if (record.feedSide) {
+          details += ` – Side: ${capitalize(record.feedSide)}`;
+        }
+        if (startText && endText) {
+          details += ` (Start ${startText}, End ${endText} Melbourne time)`;
+        }
+
+        const qualityNote = record.feedQualityNote?.trim();
+        const qualityText = [record.feedQuality, qualityNote].filter(Boolean).join(" – ");
+        if (qualityText) {
+          details += ` - Feed quality: ${qualityText}`;
+        }
+
+        if (record.notes) {
+          details += ` - ${record.notes}`;
+        }
+
+        return details;
+      }
+
+      function nowMinus24h() {
+        const now = new Date();
+        return new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      }
+
+      function describeTimeSince(date) {
+        if (!date) return "No feed recorded yet";
+
+        const now = new Date();
+        const diffMs = Math.max(0, now - date);
+        const totalMinutes = Math.floor(diffMs / 60000);
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        const parts = [];
+        if (hours > 0) {
+          parts.push(`${hours} hour${hours === 1 ? "" : "s"}`);
+        }
+        parts.push(`${minutes} minute${minutes === 1 ? "" : "s"}`);
+
+        return `${parts.join(" ")} ago`;
+      }
+
+      // === FEED SIDE HELPERS ===
+      function getLastFeedSide(twin) {
+        const recentFeed = records.find(
+          (r) => r.type === "feed" && r.twin === twin && r.feedSide
+        );
+        return recentFeed ? recentFeed.feedSide : null;
+      }
+
+      function getLastFeedStart(twin) {
+        const recentFeed = records.find((r) => r.type === "feed" && r.twin === twin);
+        if (!recentFeed) return null;
+
+        return normalizeDate(recentFeed.feedStart) || normalizeDate(recentFeed.timestamp);
+      }
+
+      function updateLastFeedDisplays() {
+        ["henry", "poppy"].forEach((twin) => {
+          const lastStart = getLastFeedStart(twin);
+          const target = document.getElementById(`${twin}LastFeed`);
+          const nextFeedTarget = document.getElementById(`${twin}NextFeedDue`);
+
+          if (!target) return;
+
+          if (!lastStart) {
+            target.textContent = "No feed recorded yet";
+            if (nextFeedTarget) nextFeedTarget.textContent = "";
+            return;
+          }
+
+          const sinceText = describeTimeSince(lastStart);
+          const startedAt = formatMelbourneTimeOnly(lastStart);
+          target.textContent = `${sinceText} (started ${startedAt} Melbourne time)`;
+
+          if (nextFeedTarget) {
+            const nextFeedDate = new Date(lastStart.getTime() + 3 * 60 * 60 * 1000);
+            const nextFeedTime = formatMelbourneTimeOnly(nextFeedDate);
+            nextFeedTarget.textContent = `Next feed due at ${nextFeedTime} Melbourne time`;
+          }
+        });
+      }
+
+      function getRecommendedFeedSide(twin) {
+        const lastSide = getLastFeedSide(twin);
+        if (lastSide === "left") return "right";
+        if (lastSide === "right") return "left";
+        return "left";
+      }
+
+      function syncFeedSideButtons(twin, side) {
+        const normalized = (side || "").toLowerCase();
+        ["Left", "Right"].forEach((label) => {
+          const btn = document.getElementById(`${twin}Side${label}`);
+          if (!btn) return;
+          if (normalized === label.toLowerCase()) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+      }
+
+      function setFeedSide(twin, side) {
+        feedSideSelection[twin] = side;
+        syncFeedSideButtons(twin, side);
+      }
+
+      function updateFeedSideRecommendations() {
+        ["henry", "poppy"].forEach((twin) => {
+          const recommended = getRecommendedFeedSide(twin);
+          const pill = document.getElementById(`${twin}RecommendedSide`);
+          if (pill) {
+            pill.textContent = capitalize(recommended);
+          }
+          if (!feedSideSelection[twin]) {
+            setFeedSide(twin, recommended);
+          }
+        });
+      }
+
+      function setEditFeedSide(side) {
+        editFeedSideSelection = side;
+        ["Left", "Right"].forEach((label) => {
+          const btn = document.getElementById(`editFeedSide${label}`);
+          if (!btn) return;
+          if (label.toLowerCase() === side) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+      }
+
+      // === TEMP SELECTOR INIT ===
+      function initTempSelector() {
+        const tempScroll = document.getElementById("tempScroll");
+        const temps = [];
+
+        for (let temp = 35.0; temp <= 42.0; temp += 0.1) {
+          temps.push(Math.round(temp * 10) / 10);
+        }
+
+        temps.forEach((temp) => {
+          const option = document.createElement("div");
+          option.className = "temp-option";
+          option.textContent = `${temp.toFixed(1)}°C`;
+          option.onclick = (e) => selectTemp(e, temp);
+
+          if (temp === 36.5) {
+            option.classList.add("selected");
+          }
+
+          tempScroll.appendChild(option);
+        });
+      }
+
+      function selectTemp(e, temp) {
+        selectedTemp = temp;
+        document.getElementById("tempDisplay").textContent =
+          temp.toFixed(1) + "°C";
+
+        document.querySelectorAll(".temp-option").forEach((opt) => {
+          opt.classList.remove("selected");
+        });
+        e.target.classList.add("selected");
+        e.target.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      // === TWIN SELECTOR ===
+      function selectTwin(e, twin) {
+        selectedTwin = twin;
+        document.querySelectorAll(".twin-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        e.target.classList.add("active");
+      }
+
+      // === ACTIVITY TYPE CHANGE ===
+      function selectActivity(e, type) {
+        selectedActivity = type;
+        document.querySelectorAll(".activity-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        if (e && e.target) {
+          e.target.classList.add("active");
+        }
+        updateActivityDisplay(type);
+      }
+
+      function updateActivityDisplay(type) {
+        document.getElementById("nappyType").style.display =
+          type === "nappy" ? "block" : "none";
+        document.getElementById("tempValue").style.display =
+          type === "temp" ? "block" : "none";
+        document.getElementById("milkAmount").style.display =
+          type === "milk" ? "block" : "none";
+
+        if (type !== "nappy") {
+          selectedNappyTypes = [];
+          selectedPoopColor = "";
+          document
+            .querySelectorAll(".nappy-btn")
+            .forEach((btn) => btn.classList.remove("active"));
+          document
+            .querySelectorAll(".poop-color-btn")
+            .forEach((btn) => btn.classList.remove("active"));
+          updatePoopColorVisibility();
+        }
+      }
+
+      document
+        .getElementById("editFeedStart")
+        .addEventListener("change", updateEditFeedDurationPreview);
+      document
+        .getElementById("editFeedEnd")
+        .addEventListener("change", updateEditFeedDurationPreview);
+      document
+        .getElementById("editFeedQualityNote")
+        .addEventListener("input", updateEditFeedDurationPreview);
+
+      // === NAPPY ===
+      function toggleNappyType(type) {
+        const btn = document.getElementById(
+          type === "poop" ? "poopBtn" : "peeBtn"
+        );
+
+        if (selectedNappyTypes.includes(type)) {
+          selectedNappyTypes = selectedNappyTypes.filter((t) => t !== type);
+          btn.classList.remove("active");
+        } else {
+          selectedNappyTypes.push(type);
+          btn.classList.add("active");
+        }
+
+        updatePoopColorVisibility();
+      }
+
+      function updatePoopColorVisibility() {
+        const group = document.getElementById("poopColorGroup");
+        if (!group) return;
+
+        const hasPoop = selectedNappyTypes.includes("poop");
+        group.style.display = hasPoop ? "block" : "none";
+
+        if (!hasPoop) {
+          selectedPoopColor = "";
+          document
+            .querySelectorAll(".poop-color-btn")
+            .forEach((btn) => btn.classList.remove("active"));
+        }
+      }
+
+      function selectPoopColor(color) {
+        selectedPoopColor = color;
+        document.querySelectorAll(".poop-color-btn").forEach((btn) => {
+          if (btn.textContent.trim().toLowerCase() === color.toLowerCase()) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+      }
+
+      // === FEED TIMERS ===
+      function startFeedTimer(e, twin) {
+        e.preventDefault();
+        const now = new Date();
+
+        if (twin === "henry") {
+          feedStartTimeHenry = now;
+          document.getElementById("feedStartBtnHenry").style.display = "none";
+          document.getElementById("feedEndBtnHenry").style.display = "block";
+          document.getElementById("timerDisplayHenry").style.display = "block";
+          timerIntervalHenry = setInterval(
+            () => updateTimerDisplay("henry"),
+            1000
+          );
+          updateTimerDisplay("henry");
+        } else {
+          feedStartTimePoppy = now;
+          document.getElementById("feedStartBtnPoppy").style.display = "none";
+          document.getElementById("feedEndBtnPoppy").style.display = "block";
+          document.getElementById("timerDisplayPoppy").style.display = "block";
+          timerIntervalPoppy = setInterval(
+            () => updateTimerDisplay("poppy"),
+            1000
+          );
+          updateTimerDisplay("poppy");
+        }
+      }
+
+      async function endFeedTimer(e, twin) {
+        e.preventDefault();
+
+        const feedStartTime =
+          twin === "henry" ? feedStartTimeHenry : feedStartTimePoppy;
+        if (!feedStartTime) return;
+
+        stopTimer(twin);
+
+        const endTime = new Date();
+        const durationMs = endTime - feedStartTime;
+        const notes = document.getElementById("notes").value.trim();
+        const selectedSide =
+          feedSideSelection[twin] || getRecommendedFeedSide(twin);
+
+        pendingFeedFinalize = {
+          twin,
+          type: "feed",
+          timestamp: feedStartTime,
+          feedStart: feedStartTime.toISOString(),
+          feedEnd: endTime.toISOString(),
+          durationMs,
+          feedSide: selectedSide,
+          feedQuality: selectedFeedQuality || "",
+          feedQualityNote: document
+            .getElementById("feedQualityNote")
+            .value.trim(),
+          notes,
+        };
+
+        document.getElementById("feedQualityModalNote").value =
+          pendingFeedFinalize.feedQualityNote || "";
+        const summaryText = `${formatDurationText(durationMs).label} (${formatMelbourneTimeOnly(
+          feedStartTime
+        )} to ${formatMelbourneTimeOnly(endTime)} Melbourne time)`;
+        document.getElementById("feedEndSummary").textContent = summaryText;
+        document.getElementById("feedQualityModal").style.display = "flex";
+        syncFeedQualityButtons(selectedFeedQuality, [
+          ".feed-quality-card .feed-quality-btn",
+          "#feedQualityModal .feed-quality-btn",
+        ]);
+      }
+
+      function updateTimerDisplay(twin) {
+        const feedStartTime =
+          twin === "henry" ? feedStartTimeHenry : feedStartTimePoppy;
+        if (!feedStartTime) return;
+
+        const now = new Date();
+        const elapsed = now - feedStartTime;
+        const minutes = Math.floor(elapsed / 60000);
+        const seconds = Math.floor((elapsed % 60000) / 1000);
+
+        const displayId =
+          twin === "henry" ? "timerDisplayHenry" : "timerDisplayPoppy";
+        document.getElementById(displayId).textContent =
+          String(minutes).padStart(2, "0") +
+          ":" +
+          String(seconds).padStart(2, "0");
+      }
+
+      function stopTimer(twin) {
+        if (twin === "henry") {
+          if (timerIntervalHenry) {
+            clearInterval(timerIntervalHenry);
+            timerIntervalHenry = null;
+          }
+          feedStartTimeHenry = null;
+          document.getElementById("feedStartBtnHenry").style.display = "block";
+          document.getElementById("feedEndBtnHenry").style.display = "none";
+          document.getElementById("timerDisplayHenry").style.display = "none";
+          document.getElementById("timerDisplayHenry").textContent = "00:00";
+        } else {
+          if (timerIntervalPoppy) {
+            clearInterval(timerIntervalPoppy);
+            timerIntervalPoppy = null;
+          }
+          feedStartTimePoppy = null;
+          document.getElementById("feedStartBtnPoppy").style.display = "block";
+          document.getElementById("feedEndBtnPoppy").style.display = "none";
+          document.getElementById("timerDisplayPoppy").style.display = "none";
+          document.getElementById("timerDisplayPoppy").textContent = "00:00";
+        }
+      }
+
+      async function finalizeFeedRecord() {
+        if (!pendingFeedFinalize) return;
+
+        const feedQualityNote = document
+          .getElementById("feedQualityModalNote")
+          .value.trim();
+        const record = {
+          ...pendingFeedFinalize,
+          feedQuality: selectedFeedQuality || "",
+          feedQualityNote,
+        };
+        record.details = buildFeedDetails(record);
+
+        await addRecord(record);
+
+        const nextSide = getRecommendedFeedSide(record.twin);
+        setFeedSide(record.twin, nextSide);
+        updateFeedSideRecommendations();
+
+        document.getElementById("notes").value = "";
+        document.getElementById("feedQualityNote").value = "";
+        document.getElementById("feedQualityModalNote").value = "";
+        document.getElementById("feedQualityModal").style.display = "none";
+        selectedFeedQuality = "";
+        pendingFeedFinalize = null;
+        syncFeedQualityButtons("", [
+          ".feed-quality-card .feed-quality-btn",
+          "#feedQualityModal .feed-quality-btn",
+        ]);
+      }
+
+      function cancelFeedFinalize() {
+        document.getElementById("feedQualityModal").style.display = "none";
+        pendingFeedFinalize = null;
+      }
+
+      // === SAVE / ADD RECORDS ===
+      async function saveRecord() {
+        const type = selectedActivity;
+        const notes = document.getElementById("notes").value.trim();
+        const now = new Date();
+
+        let details = "";
+        const record = {
+          twin: selectedTwin,
+          type: type,
+          timestamp: now,
+        };
+
+        if (type === "nappy") {
+          if (selectedNappyTypes.length === 0) {
+            alert("Please select poop, wee, or both");
+            return;
+          }
+          const nappyText = selectedNappyTypes
+            .map((t) => t.charAt(0).toUpperCase() + t.slice(1))
+            .join(" & ");
+          details = `Nappy changed - ${nappyText}`;
+          record.nappyTypes = [...selectedNappyTypes];
+          if (
+            selectedNappyTypes.includes("poop") &&
+            selectedPoopColor.trim().length > 0
+          ) {
+            details += ` (Poo colour: ${selectedPoopColor})`;
+            record.poopColor = selectedPoopColor;
+          }
+        } else if (type === "feed") {
+          // Feed is handled via the timer auto-save
+          return;
+        } else if (type === "temp") {
+          const temp = selectedTemp;
+          details = `Temperature: ${temp.toFixed(1)}°C`;
+          record.temp = temp;
+        } else if (type === "milk") {
+          const mlRaw = document.getElementById("milkMl").value;
+          const ml = mlRaw ? parseFloat(mlRaw) : null;
+          details = ml ? `Expressed milk: ${ml} ml` : "Expressed milk given";
+          record.milkMl = ml || 0;
+        }
+
+        if (notes) {
+          details += ` - ${notes}`;
+        }
+        record.details = details;
+
+        await addRecord(record);
+        clearForm();
+      }
+
+      async function addRecord(record) {
+        try {
+          const dataToSave = {
+            ...record,
+            timestamp: firebase.firestore.Timestamp.fromDate(
+              record.timestamp || new Date()
+            ),
+          };
+          const docRef = await db.collection(COLLECTION_NAME).add(dataToSave);
+          record.id = docRef.id;
+
+          // Convert Firestore timestamp -> Date for in-memory use
+          record.timestamp =
+            record.timestamp instanceof Date
+              ? record.timestamp
+              : new Date(record.timestamp);
+
+          records.unshift(record);
+          displayRecords();
+        } catch (err) {
+          console.error("Error saving record:", err);
+          alert(
+            "There was a problem saving to Firebase. Check the console and your config."
+          );
+        }
+      }
+
+      // === CLEAR FORM ===
+      function clearForm() {
+        document.getElementById("milkMl").value = "";
+        document.getElementById("notes").value = "";
+        selectedNappyTypes = [];
+        selectedPoopColor = "";
+        document
+          .querySelectorAll(".nappy-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        document
+          .querySelectorAll(".poop-color-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        updatePoopColorVisibility();
+
+        selectedTemp = 36.5;
+        document.getElementById("tempDisplay").textContent = "36.5°C";
+        document.querySelectorAll(".temp-option").forEach((opt) => {
+          opt.classList.remove("selected");
+          if (opt.textContent === "36.5°C") {
+            opt.classList.add("selected");
+          }
+        });
+      }
+
+      // === DELETE RECORD ===
+      async function deleteRecord(id) {
+        try {
+          await db.collection(COLLECTION_NAME).doc(id).delete();
+        } catch (err) {
+          console.error("Error deleting record:", err);
+          alert("Error deleting record from Firebase.");
+        }
+        records = records.filter((r) => r.id !== id);
+        displayRecords();
+      }
+
+      function openEditModal(id) {
+        const record = records.find((r) => r.id === id);
+        if (!record) return;
+
+        currentEditRecordId = id;
+        document.getElementById("editDetails").value = record.details || "";
+        document.getElementById("editTimestamp").value = formatDateTimeLocal(
+          record.timestamp || new Date()
+        );
+
+        const feedTimes = document.getElementById("editFeedTimes");
+        const feedQualityGroup = document.getElementById("editFeedQualityGroup");
+        const feedSideGroup = document.getElementById("editFeedSideGroup");
+
+        if (record.type === "feed") {
+          feedTimes.style.display = "block";
+          feedQualityGroup.style.display = "block";
+          feedSideGroup.style.display = "block";
+          document.getElementById("editFeedStart").value = formatDateTimeLocal(
+            record.feedStart
+              ? record.feedStart.toDate
+                ? record.feedStart.toDate()
+                : new Date(record.feedStart)
+              : record.timestamp
+          );
+          document.getElementById("editFeedEnd").value = formatDateTimeLocal(
+            record.feedEnd
+              ? record.feedEnd.toDate
+                ? record.feedEnd.toDate()
+                : new Date(record.feedEnd)
+              : new Date()
+          );
+          setEditFeedSide(
+            (record.feedSide || getRecommendedFeedSide(record.twin)).toLowerCase()
+          );
+          const normalizedQuality = (record.feedQuality || "").toLowerCase();
+          if (["low", "medium", "great"].includes(normalizedQuality)) {
+            setEditFeedQuality(record.feedQuality);
+          } else {
+            setEditFeedQuality("");
+          }
+          document.getElementById("editFeedQualityNote").value =
+            record.feedQualityNote || (!editFeedQualityLevel ? record.feedQuality || "" : "");
+          updateEditFeedDurationPreview();
+        } else {
+          feedTimes.style.display = "none";
+          feedQualityGroup.style.display = "none";
+          feedSideGroup.style.display = "none";
+          document.getElementById("editFeedStart").value = "";
+          document.getElementById("editFeedEnd").value = "";
+          document.getElementById("editFeedQualityNote").value = "";
+          setEditFeedQuality("");
+          setEditFeedSide("left");
+          document.getElementById("editFeedDuration").textContent = "";
+        }
+
+        document.getElementById("editModal").style.display = "flex";
+      }
+
+      function closeEditModal() {
+        document.getElementById("editModal").style.display = "none";
+        currentEditRecordId = null;
+      }
+
+      function updateEditFeedDurationPreview() {
+        const startVal = document.getElementById("editFeedStart").value;
+        const endVal = document.getElementById("editFeedEnd").value;
+        const durationEl = document.getElementById("editFeedDuration");
+        if (!durationEl) return;
+
+        if (startVal && endVal) {
+          const durationMs = Math.max(0, new Date(endVal) - new Date(startVal));
+          const { label } = formatDurationText(durationMs);
+          durationEl.textContent = label;
+          const record = records.find((r) => r.id === currentEditRecordId);
+          if (record && record.type === "feed") {
+            const tempRecord = {
+              ...record,
+              feedStart: startVal,
+              feedEnd: endVal,
+              durationMs,
+              feedSide: editFeedSideSelection || record.feedSide,
+              feedQuality: editFeedQualityLevel,
+              feedQualityNote: document
+                .getElementById("editFeedQualityNote")
+                .value.trim(),
+            };
+            document.getElementById("editDetails").value = buildFeedDetails(
+              tempRecord
+            );
+          }
+        } else {
+          durationEl.textContent = "";
+        }
+      }
+
+      async function saveEdit() {
+        if (!currentEditRecordId) return;
+        const record = records.find((r) => r.id === currentEditRecordId);
+        if (!record) return;
+
+        const newDetails = document.getElementById("editDetails").value;
+        const tsValue = document.getElementById("editTimestamp").value;
+        const newTimestamp = tsValue ? new Date(tsValue) : new Date();
+
+        record.details = newDetails;
+        record.timestamp = newTimestamp;
+
+        const updateData = {
+          details: newDetails,
+          timestamp: firebase.firestore.Timestamp.fromDate(newTimestamp),
+        };
+
+        if (record.type === "feed") {
+          const startVal = document.getElementById("editFeedStart").value;
+          const endVal = document.getElementById("editFeedEnd").value;
+          const qualityNoteVal = document
+            .getElementById("editFeedQualityNote")
+            .value.trim();
+          const qualityVal = editFeedQualityLevel;
+
+          if (startVal) {
+            const startDate = new Date(startVal);
+            record.feedStart = startDate.toISOString();
+            updateData.feedStart = record.feedStart;
+          }
+          if (endVal) {
+            const endDate = new Date(endVal);
+            record.feedEnd = endDate.toISOString();
+            updateData.feedEnd = record.feedEnd;
+          }
+          if (startVal && endVal) {
+            record.durationMs = Math.max(0, new Date(endVal) - new Date(startVal));
+            updateData.durationMs = record.durationMs;
+          }
+
+          record.feedSide =
+            editFeedSideSelection || record.feedSide || getRecommendedFeedSide(record.twin);
+          updateData.feedSide = record.feedSide;
+
+          record.feedQuality = qualityVal;
+          record.feedQualityNote = qualityNoteVal;
+          record.details = buildFeedDetails(record);
+          updateData.feedQuality = qualityVal;
+          updateData.feedQualityNote = qualityNoteVal;
+          updateData.details = record.details;
+        }
+
+        try {
+          await db.collection(COLLECTION_NAME).doc(record.id).update(updateData);
+          records.sort(
+            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+          );
+          displayRecords();
+          closeEditModal();
+        } catch (err) {
+          console.error("Error updating record:", err);
+          alert("Unable to update record in Firebase.");
+        }
+      }
+
+      function renderFeedQualityInline(record) {
+        if (record.type !== "feed") return "";
+
+        const qualityLabel = record.feedQuality || "Not recorded";
+        const note = record.feedQualityNote?.trim();
+        const noteMarkup = note
+          ? `<div class="inline-quality-note-display">${escapeHtml(note)}</div>`
+          : "";
+
+        return `
+          <div class="inline-feed-quality" data-record-id="${record.id}">
+            <div class="inline-quality-label">Feed quality</div>
+            <div class="feed-quality-summary">
+              <span class="feed-quality-chip">${escapeHtml(qualityLabel)}</span>
+            </div>
+            ${noteMarkup}
+          </div>
+        `;
+      }
+
+      async function updateInlineFeedQuality(recordId, level) {
+        const record = records.find((r) => r.id === recordId);
+        if (!record || record.type !== "feed") return;
+
+        record.feedQuality = level;
+        record.details = buildFeedDetails(record);
+
+        try {
+          await db.collection(COLLECTION_NAME).doc(record.id).update({
+            feedQuality: level,
+            feedQualityNote: record.feedQualityNote || "",
+            details: record.details,
+          });
+          displayRecords();
+        } catch (err) {
+          console.error("Error updating feed quality:", err);
+          alert("Unable to update feed quality.");
+        }
+      }
+
+      async function updateInlineQualityNote(recordId, note) {
+        const record = records.find((r) => r.id === recordId);
+        if (!record || record.type !== "feed") return;
+
+        record.feedQualityNote = note.trim();
+        record.details = buildFeedDetails(record);
+
+        try {
+          await db.collection(COLLECTION_NAME).doc(record.id).update({
+            feedQualityNote: record.feedQualityNote,
+            feedQuality: record.feedQuality || "",
+            details: record.details,
+          });
+          displayRecords();
+        } catch (err) {
+          console.error("Error updating feed quality note:", err);
+          alert("Unable to update feed quality note.");
+        }
+      }
+
+      // === DISPLAY & FILTER RECORDS ===
+      function resetRecordFilters() {
+        const twinFilterEl = document.getElementById("twinFilter");
+        const timeFilterEl = document.getElementById("timeFilter");
+        const typeFilterEl = document.getElementById("typeFilter");
+
+        if (twinFilterEl) twinFilterEl.value = "all";
+        if (timeFilterEl) timeFilterEl.value = "all";
+        if (typeFilterEl) typeFilterEl.value = "all";
+
+        displayRecords();
+      }
+
+      function displayRecords() {
+        const list = document.getElementById("recordsList");
+
+        const twinFilterEl = document.getElementById("twinFilter");
+        const timeFilterEl = document.getElementById("timeFilter");
+        const typeFilterEl = document.getElementById("typeFilter");
+        const twinFilter = twinFilterEl ? twinFilterEl.value : "all";
+        const timeFilter = timeFilterEl ? timeFilterEl.value : "all";
+        const typeFilter = typeFilterEl ? typeFilterEl.value : "all";
+        const cutoff24h = nowMinus24h();
+        const feedPartsMap = buildFeedPartMap(records);
+
+        let filtered = records.slice();
+
+        if (twinFilter !== "all") {
+          filtered = filtered.filter((r) => r.twin === twinFilter);
+        }
+
+        if (timeFilter === "24h") {
+          filtered = filtered.filter((r) => new Date(r.timestamp) >= cutoff24h);
+        }
+
+        if (typeFilter !== "all") {
+          filtered = filtered.filter((r) => r.type === typeFilter);
+        }
+
+        if (filtered.length === 0) {
+          list.innerHTML =
+            '<p style="color: #999; text-align: center;">No records yet</p>';
+        } else {
+          list.innerHTML = filtered
+            .map((record) => {
+              if (record.type === "feed") {
+                const partInfo = feedPartsMap[record.id];
+                if (partInfo) {
+                  record.feedPart = partInfo.part;
+                  record.feedGroupSize = partInfo.groupSize;
+                }
+                record.details = buildFeedDetails(record);
+              }
+
+              const twinLabel = record.twin === "henry" ? "Henry" : "Poppy";
+              const twinClass =
+                record.twin === "henry" ? "twin-henry" : "twin-poppy";
+              const inlineQuality =
+                record.type === "feed" ? renderFeedQualityInline(record) : "";
+              const typeLabels = {
+                feed: "Feed",
+                nappy: "Nappy",
+                temp: "Temperature",
+                milk: "Expressed milk",
+              };
+              const typeLabel = typeLabels[record.type] || "Entry";
+              const typeClass = `record-type-${record.type}`;
+
+              const detailParts = record.details
+                ? record.details
+                    .split(/ - | – /)
+                    .map((part) => escapeHtml(part.trim()))
+                    .filter(Boolean)
+                : [];
+              const primaryDetail =
+                detailParts.length > 0 ? detailParts[0] : "Details recorded";
+              const additionalDetails = detailParts.slice(1);
+
+              return `
+                <div class="record-item">
+                  <div class="record-header">
+                    <div class="record-identifiers">
+                      <span class="twin-badge ${twinClass}">${twinLabel}</span>
+                      <span class="record-type-pill ${typeClass}">${typeLabel}</span>
+                    </div>
+                    <div class="record-meta">
+                      <span class="record-time">${formatMelbourneDate(
+                        record.timestamp
+                      )}</span>
+                      <div class="record-actions">
+                        <button class="delete-btn" onclick="openEditModal('${
+                          record.id
+                        }')">Edit</button>
+                        <button class="delete-btn" onclick="deleteRecord('${
+                          record.id
+                        }')">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="record-details">
+                    <div class="record-primary">${primaryDetail}</div>
+                    ${
+                      additionalDetails.length
+                        ? `<ul class="record-detail-list">${additionalDetails
+                            .map((detail) => `<li>${detail}</li>`)
+                            .join("")}</ul>`
+                        : ""
+                    }
+                  </div>
+                  ${inlineQuality}
+                </div>
+              `;
+            })
+            .join("");
+        }
+
+        updateFeedSideRecommendations();
+        updateLastFeedDisplays();
+        updateSummary();
+      }
+
+      // === SUMMARY (LAST 24 HOURS) ===
+      function updateSummary() {
+        const cutoff = nowMinus24h();
+        const twins = ["henry", "poppy"];
+
+        twins.forEach((twin) => {
+          const twinRecords = records.filter(
+            (r) => r.twin === twin && new Date(r.timestamp) >= cutoff
+          );
+
+          const poops = twinRecords.filter(
+            (r) =>
+              r.type === "nappy" &&
+              Array.isArray(r.nappyTypes) &&
+              r.nappyTypes.includes("poop")
+          ).length;
+
+          const wees = twinRecords.filter(
+            (r) =>
+              r.type === "nappy" &&
+              Array.isArray(r.nappyTypes) &&
+              r.nappyTypes.includes("pee")
+          ).length;
+
+          const feedRecords = twinRecords.filter((r) => r.type === "feed");
+          const feedGroups = groupFeedsByWindow(feedRecords);
+          const feedCount = feedGroups.length;
+          const totalFeedMs = feedRecords.reduce(
+            (sum, r) => sum + (r.durationMs || 0),
+            0
+          );
+          const totalFeedMinutes = Math.round(totalFeedMs / 60000);
+
+          const tempValues = twinRecords
+            .filter((r) => r.type === "temp" && typeof r.temp === "number")
+            .map((r) => r.temp);
+          const avgTemp =
+            tempValues.length > 0
+              ? tempValues.reduce((a, b) => a + b, 0) / tempValues.length
+              : null;
+
+          const milkRecords = twinRecords.filter((r) => r.type === "milk");
+          const milkCount = milkRecords.length;
+          const totalMilkMl = milkRecords.reduce(
+            (sum, r) => sum + (r.milkMl || 0),
+            0
+          );
+
+          const prefix = twin === "henry" ? "henry" : "poppy";
+
+          const poopWeeEl = document.getElementById(prefix + "SummaryPoopWee");
+          const feedsEl = document.getElementById(prefix + "SummaryFeeds");
+          const tempEl = document.getElementById(prefix + "SummaryTemp");
+          const milkEl = document.getElementById(prefix + "SummaryMilk");
+
+          if (poopWeeEl) {
+            poopWeeEl.textContent = `Poos: ${poops} • Wees: ${wees}`;
+          }
+          if (feedsEl) {
+            feedsEl.textContent = `Feeds: ${feedCount} (${totalFeedMinutes} mins total)`;
+          }
+          if (tempEl) {
+            tempEl.textContent = avgTemp
+              ? `Avg temp: ${avgTemp.toFixed(1)}°C`
+              : "Avg temp: –";
+          }
+          if (milkEl) {
+            milkEl.textContent = `Top ups: ${milkCount} (${totalMilkMl} ml)`;
+          }
+        });
+      }
+
+      // === LOAD RECORDS FROM FIRESTORE ON STARTUP ===
+      async function loadRecordsFromFirebase() {
+        try {
+          const snapshot = await db
+            .collection(COLLECTION_NAME)
+            .orderBy("timestamp", "desc")
+            .get();
+
+          records = snapshot.docs.map((doc) => {
+            const data = doc.data();
+            const ts = data.timestamp;
+            const jsDate =
+              ts && ts.toDate ? ts.toDate() : ts ? new Date(ts) : new Date();
+
+            return {
+              id: doc.id,
+              ...data,
+              timestamp: jsDate,
+            };
+          });
+
+          displayRecords();
+        } catch (err) {
+          console.error("Error loading records:", err);
+          const list = document.getElementById("recordsList");
+          if (list) {
+            list.innerHTML =
+              '<p style="color:#e53e3e; text-align:center;">Could not load data from Firebase. Check your configuration.</p>';
+          }
+        }
+      }
+
+      // Init on load
+      updateActivityDisplay(selectedActivity);
+      initTempSelector();
+      updateFeedSideRecommendations();
+      updateLastFeedDisplays();
+      setInterval(updateLastFeedDisplays, 60000);
+      loadRecordsFromFirebase();
+    </script>
+  </body>
+</html>
